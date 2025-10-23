@@ -50,7 +50,6 @@ Design moderne
 - Articles chargés depuis l'API publique JSONPlaceholder (https://jsonplaceholder.typicode.com) avec fallback vers `api/posts.json` si l'API est indisponible.
 - Formulaire de contact aligné et amélioration du rendu responsive.
 
-- Les articles locaux incluent maintenant un champ `wiki` pointant vers des pages Wikipédia FR. Quand tu cliques sur "Lire l'article →", le lecteur charge la page depuis l'API REST de Wikipédia (contenu CC BY-SA). Si tu préfères une autre source libre, dis‑le.
 - Si tu veux une version encore plus avancée (thème, composants réutilisables, animations supplémentaires), je peux intégrer Tailwind ou un petit build (Vite) pour faciliter les développements.
 
 Si tu veux que je transforme ça en un petit site prêt à déployer (Netlify/Vercel) ou que j'ajoute une navigation complète et pages dynamiques, je peux le faire.
