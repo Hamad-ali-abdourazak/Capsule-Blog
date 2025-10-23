@@ -1,0 +1,5 @@
+[
+  {"id":1,"title":"Bienvenue sur WeWeb Facile","excerpt":"Un petit exemple de post pour démarrer votre projet."},
+  {"id":2,"title":"Deuxième article","excerpt":"Montre comment weweb peut consommer des fichiers JSON statiques."},
+  {"id":3,"title":"Astuce","excerpt":"Vous pouvez uploader ce fichier JSON dans les assets WeWeb pour une source de données rapide."}
+]

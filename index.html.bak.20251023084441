@@ -1,0 +1,140 @@
+﻿<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="CapsuleBlog — starter moderne et en français pour sites statiques ou import WeWeb.">
+    <title>CapsuleBlog — Starter moderne</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <!-- Utilise une font web moderne (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <img src="assets/favicon.svg" alt="logo" width="28" height="28">
+      <span>CapsuleBlog</span>
+    </a>
+    <div class="header-actions">
+      <button id="theme-toggle" aria-label="Basculer le thème" title="Basculer le thème"></button>
+      <button id="nav-toggle" aria-label="Ouvrir le menu"></button>
+    </div>
+    <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
+      <a href="#posts">Articles</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+    <section class="hero-panel">
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <h1>CapsuleBlog</h1>
+          <a class="btn" href="#posts">Commencer</a>
+        </div>
+      </div>
+    </section>
+
+    <main class="container main-grid">
+      <section id="posts" class="posts-area">
+        <div class="section-header">
+          <h2>Derniers articles</h2>
+          <input id="search" placeholder="Rechercher un article…" aria-label="Rechercher des articles">
+        </div>
+        <div id="posts-list" class="cards-grid">Chargement…</div>
+      </section>
+
+      <aside class="sidebar" id="contact">
+        <div class="card">
+          <h3>Contact rapide</h3>
+          <form id="contact-form" class="contact-grid">
+  <label for="c-name">Nom</label>
+  <input id="c-name" name="name" required>
+
+  <label for="c-email">Email</label>
+  <input id="c-email" name="email" type="email" required>
+
+  <label for="c-message">Message</label>
+  <textarea id="c-message" name="message" required></textarea>
+
+  <div></div>
+  <button type="submit" class="btn">Envoyer</button>
+</form>
+          <div id="contact-result" class="muted"></div>
+        </div>
+        <div class="card small">
+          <h4>Infos</h4>
+          <p class="muted">Ce starter est léger et conçu pour être adapté rapidement.</p>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>© 2025 CapsuleBlog • Starter moderne</small>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile nav toggle
+      document.getElementById('nav-toggle').addEventListener('click', ()=>{
+        document.getElementById('main-nav').classList.toggle('open');
+      });
+
+      // Load posts and render cards (local French content only)
+      async function loadPosts(){
+        const el = document.getElementById('posts-list');
+        el.textContent = 'Chargement…';
+        try{
+          const res = await fetch('api/posts.json');
+          if(!res.ok) throw new Error('Local data not found');
+          const posts = await res.json();
+          renderPosts(posts);
+        }catch(e){
+          el.textContent = 'Impossible de charger les articles.';
+          console.error(e);
+        }
+      }
+
+      function renderPosts(posts){
+        const el = document.getElementById('posts-list');
+        el.innerHTML = posts.map(p=>`
+          <article class="card post-card">
+            <div class="thumb">
+              <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#eef6ff"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#7aa3ff" font-size="20">${escapeHtml(p.title.split(' ')[0])}</text></svg>
+            </div>
+            <div class="card-body">
+              <h3>${escapeHtml(p.title)}</h3>
+              <p class="excerpt">${escapeHtml(p.excerpt)}</p>
+              <a class="read-more" href="post-${p.id}.html">Lire la suite →</a>
+            </div>
+          </article>
+        `).join('');
+
+        // simple search
+        const search = document.getElementById('search');
+        search.addEventListener('input', ()=>{
+          const q = search.value.toLowerCase();
+          Array.from(el.children).forEach(card=>{
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            card.style.display = title.includes(q) ? '' : 'none';
+          });
+        });
+      }
+
+      function escapeHtml(s){
+        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      }
+
+      document.getElementById('contact-form').addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        document.getElementById('contact-result').textContent = `Merci ${fd.get('name')} — message reçu.`;
+        e.target.reset();
+      });
+
+      loadPosts();`n`n      (function(){`n        const root=document.documentElement; const key="capsule-theme"; const apply=(t)=>root.setAttribute("data-theme",t); const cur=localStorage.getItem(key)||"dark"; apply(cur); const btn=document.getElementById("theme-toggle"); if(btn){btn.addEventListener("click",()=>{const next=(root.getAttribute("data-theme")==="dark")?"light":"dark";apply(next);localStorage.setItem(key,next);});}`n      })();`n    </script>
+  </body>
+</html>
